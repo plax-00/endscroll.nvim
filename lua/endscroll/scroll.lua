@@ -1,9 +1,23 @@
 local api = vim.api
 local fn = vim.fn
 
+local function contains(table, val)
+    for _, filetype in pairs(table) do
+        if filetype == val then return true end
+    end
+    return false
+end
+
 local function scroll()
-    local scrolloff = vim.o.scrolloff
     local opts = vim.g.endscroll_opts
+
+    -- check for disabled filetype
+    if contains(opts.disabled_filetypes, vim.o.filetype) then
+        api.nvim_input('<Down>')
+        return
+    end
+
+    local scrolloff = vim.o.scrolloff
     local last_line = fn.line('$')
     local height = api.nvim_win_get_height(0)
     local current_line = fn.line('.')
