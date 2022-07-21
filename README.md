@@ -26,6 +26,3 @@ Vimscript:
 ```
 lua require('endscroll').setup {}
 ```
-
-### Note
-This plugin will overwrite key mappings for `<Down>` and `<C-e>` and reset them to the default.

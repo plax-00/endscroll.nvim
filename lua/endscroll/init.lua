@@ -14,10 +14,6 @@ M.setup = function(opts)
 
     vim.g.endscroll_opts = opts
 
-    -- reset necessary keymaps
-    vim.keymap.set({ 'n', 'v' }, '<Down>', '<Down>')
-    vim.keymap.set({ 'n', 'v' }, '<C-e>', '<C-e>')
-
     local scroll = require('endscroll.scroll')
     vim.keymap.set({ 'n', 'v' }, 'j', scroll, { silent = true })
 end
