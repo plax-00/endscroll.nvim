@@ -16,6 +16,7 @@ M.setup = function(opts)
 
     local scroll = require('endscroll.scroll')
     vim.keymap.set({ 'n', 'v' }, 'j', scroll, { silent = true })
+    require('endscroll.autocmds')
 end
 
 
