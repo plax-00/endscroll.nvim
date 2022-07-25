@@ -6,9 +6,13 @@ M.setup = function(opts)
         disabled_filetypes = {},
     }
 
-    for key, value in pairs(default_opts) do
-        if opts[key] == nil then
-            opts[key] = value
+    if opts == nil then
+        opts = default_opts
+    else
+        for key, value in pairs(default_opts) do
+            if opts[key] == nil then
+                opts[key] = value
+            end
         end
     end
 
