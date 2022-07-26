@@ -11,14 +11,14 @@ local function load_window_view()
     end
 end
 
-api.nvim_create_augroup('RestoreWinView', { clear = true })
+api.nvim_create_augroup('EndscrollRestoreWinView', { clear = true })
 api.nvim_create_autocmd('BufLeave', {
-    group = 'RestoreWinView',
+    group = 'EndscrollRestoreWinView',
     pattern = '*',
     callback = save_window_view,
 })
 api.nvim_create_autocmd('BufEnter', {
-    group = 'RestoreWinView',
+    group = 'EndscrollRestoreWinView',
     pattern = '*',
     callback = load_window_view,
 })
