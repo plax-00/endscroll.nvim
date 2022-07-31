@@ -1,6 +1,6 @@
 endscroll.nvim
 ==============
-A simple plugin to make Neovim naturally scroll through the end of files. Uses the `scrolloff` option to continue scrolling as if there were more lines below the last line.
+A simple plugin to make Neovim naturally scroll through the end of files. Uses the value of `scrolloff` to continue scrolling as if there were more lines below the last line.
 
 ![Example](https://i.imgur.com/vzkoJAA.gif)
 
@@ -30,7 +30,7 @@ Vimscript:
 lua require('endscroll').setup {}
 ```
 #### Settings
-These are default settings. Any changes can be made in the call to `setup`.
+These are the default settings. Any changes can be made in the call to `setup`.
 ```lua
 -- default settings
 require('endscroll').setup {
