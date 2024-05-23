@@ -20,21 +20,26 @@ local function scroll()
 
     local scrolloff = vim.o.scrolloff
     local last_line = fn.line('$')
-    local height = api.nvim_win_get_height(0)
     local current_line = fn.line('.')
-    local relative_first = current_line - fn.line('w0')
+    local top_line = fn.line('w0')
     local count = vim.v.count1
 
+
+
     for _ = 1, count, 1 do
+        local above = api.nvim_win_text_height(0, { start_row = top_line - 1, end_row = current_line - 1}).all - 1
+        local below = current_line == last_line and 0 or api.nvim_win_text_height(0, { start_row = current_line - 1, end_row = last_line - 1}).all - 2
+
         if current_line == last_line then
-            if relative_first > scrolloff and opts.scroll_at_end then
+            if above > scrolloff and opts.scroll_at_end then
                 api.nvim_feedkeys(scroll_key, 'n', false)
                 goto continue
             else
                 return
             end
         end
-        if current_line >= last_line - scrolloff and relative_first >= height - scrolloff - 1 then
+
+        if below < scrolloff then
             api.nvim_feedkeys('j' .. scroll_key, 'n', false)
             goto continue
         end
@@ -44,9 +49,9 @@ local function scroll()
         ::continue::
         if current_line < last_line - 1 then
             current_line = current_line + 1
-            relative_first = relative_first + 1
         end
     end
+
 end
 
 
