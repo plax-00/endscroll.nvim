@@ -3,16 +3,9 @@ local fn = vim.fn
 local opts = require('endscroll.config').opts
 local scroll_key = api.nvim_replace_termcodes('<C-e>', true, true, true)
 
-local function contains(table, val)
-    for _, filetype in pairs(table) do
-        if filetype == val then return true end
-    end
-    return false
-end
-
 local function scroll()
     -- check for disabled filetype
-    if contains(opts.disabled_filetypes, vim.o.filetype) then
+    if vim.tbl_contains(opts.disabled_filetypes, vim.o.filetype) then
         api.nvim_feedkeys('j', 'n', false)
         return
     end
