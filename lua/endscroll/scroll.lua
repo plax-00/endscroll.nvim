@@ -32,7 +32,7 @@ local function scroll()
         end
 
         if below < scrolloff and above >= scrolloff then
-            api.nvim_feedkeys('j' .. scroll_key, 'n', false)
+            api.nvim_feedkeys(scroll_key .. 'j', 'n', false)
             goto continue
         end
 
