@@ -6,7 +6,7 @@ local scroll_key = vim.keycode('<C-e>')
 local function scroll()
     -- check for disabled filetype
     if vim.tbl_contains(opts.disabled_filetypes, vim.o.filetype) then
-        api.nvim_feedkeys('j', 'n', false)
+        vim.cmd.normal { 'j', bang = true }
         return
     end
 
@@ -24,7 +24,7 @@ local function scroll()
 
         if current_line == last_line then
             if above > scrolloff and opts.scroll_at_end then
-                api.nvim_feedkeys(scroll_key, 'n', false)
+                vim.cmd.normal { scroll_key, bang = true }
                 goto continue
             else
                 return
@@ -32,11 +32,11 @@ local function scroll()
         end
 
         if below < scrolloff and above >= scrolloff then
-            api.nvim_feedkeys('j' .. scroll_key, 'n', false)
+            vim.cmd.normal { 'j' .. scroll_key, bang = true }
             goto continue
         end
 
-        api.nvim_feedkeys('j', 'n', true)
+        vim.cmd.normal { 'j', bang = true }
 
         ::continue::
         if current_line < last_line - 1 then
