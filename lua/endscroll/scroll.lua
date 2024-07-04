@@ -1,7 +1,7 @@
 local api = vim.api
 local fn = vim.fn
 local opts = require('endscroll.config').opts
-local scroll_key = api.nvim_replace_termcodes('<C-e>', true, true, true)
+local scroll_key = vim.keycode('<C-e>')
 
 local function scroll()
     -- check for disabled filetype
