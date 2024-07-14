@@ -6,16 +6,17 @@ local function get_text_height(start_line, end_line)
 end
 
 local function scroll()
+    local count = vim.v.count1
+
     -- check for disabled filetype
     if vim.tbl_contains(opts.disabled_filetypes, vim.o.filetype) then
-        vim.cmd.normal { 'j', bang = true }
+        vim.cmd.normal { count .. 'j', bang = true }
         return
     end
 
     local scrolloff = vim.o.scrolloff
     local last_line = line('$')
     local current_line = line('.')
-    local count = vim.v.count1
 
     local lines_to_end = get_text_height(current_line, last_line)
     local target_line = current_line + count
