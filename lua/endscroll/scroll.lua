@@ -27,6 +27,9 @@ local function scroll()
     if target_line > endscroll_start then
         local lines_above = get_text_height(line('w0'), line('.'))
         local max_scroll = lines_above - scrolloff
+        if not opts.scroll_at_end then
+            max_scroll = lines_above - (vim.fn.winheight(0) - scrolloff - 1)
+        end
 
         if count > max_scroll then count = max_scroll end
         if count < 1 then return end
