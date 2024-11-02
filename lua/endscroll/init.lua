@@ -2,6 +2,7 @@ local M = {}
 local config = require('endscroll.config')
 
 M.setup = function(opts)
+    opts = opts or {}
     config.opts = vim.tbl_deep_extend('force', config.defaults, opts)
 
     local scroll = require('endscroll.scroll')
