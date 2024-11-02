@@ -34,7 +34,7 @@ local function scroll(key)
         local lines_above = get_text_height(line('w0'), line('.'))
         local max_lines_above = vim.fn.winheight(0) - scrolloff - 1
 
-        if current_line ~= last_line and lines_above <= max_lines_above then return end
+        if current_line ~= last_line and lines_above <= max_lines_above and not ctrl_d then return end
 
         local max_scroll = lines_above - scrolloff
 
