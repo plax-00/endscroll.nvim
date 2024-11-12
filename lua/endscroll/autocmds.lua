@@ -1,24 +1,25 @@
-local api = vim.api
-local fn = vim.fn
+vim.api.nvim_create_augroup('EndscrollRestoreWinView', { clear = true })
 
-local function save_window_view()
-    vim.w.endscroll_window_view = fn.winsaveview()
-end
-
-local function load_window_view()
-    if vim.w.endscroll_window_view then
-        fn.winrestview(vim.w.endscroll_window_view)
+vim.api.nvim_create_autocmd('BufLeave', {
+    group = 'EndscrollRestoreWinView',
+    pattern = '*',
+    callback = function()
+        local views = vim.b.endscroll_window_views or {}
+        local winnr = vim.fn.winnr()
+        views[winnr] = vim.fn.winsaveview()
+        vim.b.endscroll_window_views = views
     end
-end
-
-api.nvim_create_augroup('EndscrollRestoreWinView', { clear = true })
-api.nvim_create_autocmd('WinLeave', {
-    group = 'EndscrollRestoreWinView',
-    pattern = '*',
-    callback = save_window_view,
 })
-api.nvim_create_autocmd('WinEnter', {
+
+vim.api.nvim_create_autocmd({ 'BufWinEnter' }, {
     group = 'EndscrollRestoreWinView',
     pattern = '*',
-    callback = load_window_view,
+    callback = function()
+        local views = vim.b.endscroll_window_views or {}
+        local winnr = vim.fn.winnr()
+        local winview = views[winnr]
+        if winview then
+            vim.fn.winrestview(winview)
+        end
+    end
 })
