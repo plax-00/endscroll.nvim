@@ -82,6 +82,11 @@ T.ctrl_d = function()
         child.type_keys('<C-d>')
     until child.fn.line('.') == INPUT_LINES
     eq(child.fn.winline(), child.o.scrolloff + 5)
+    child.type_keys('<C-u>')
+    child.type_keys('<C-u>')
+    eq(child.fn.winline(), child.o.scrolloff + 5)
+    child.type_keys('<C-d>')
+    eq(child.fn.winline(), child.o.scrolloff + 5)
 end
 
 T.winview = function()

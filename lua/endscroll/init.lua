@@ -6,8 +6,13 @@ M.setup = function(opts)
     config.opts = vim.tbl_deep_extend('force', config.defaults, opts)
 
     local scroll = require('endscroll.scroll')
-    vim.keymap.set({ 'n', 'v' }, 'j',     function() scroll('j')     end, { silent = true })
-    vim.keymap.set({ 'n', 'v' }, '<C-d>', function() scroll('<C-d>') end, { silent = true })
+    vim.on_key(function(key)
+        if key == 'j' or key == vim.keycode('<Down>') then
+            scroll('j')
+        elseif key == vim.keycode('<C-d>') then
+            scroll('<C-d>')
+        end
+    end)
 
     require('endscroll.autocmds')
 end

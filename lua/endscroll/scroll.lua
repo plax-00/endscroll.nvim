@@ -6,53 +6,62 @@ local function get_text_height(start_line, end_line)
 end
 
 local function scroll(key)
-    local count = vim.v.count1
 
     -- check for disabled filetype
     if vim.tbl_contains(opts.disabled_filetypes, vim.o.filetype) then
-        vim.cmd.normal { count .. vim.keycode(key), bang = true }
         return
     end
 
+    local count = vim.v.count1
     local scrolloff = vim.o.scrolloff
     local last_line = line('$')
-    local current_line = line('.')
-    local lines_to_end = get_text_height(current_line, last_line)
+    local init_line = line('.')
+    local lines_to_end = get_text_height(init_line, last_line)
 
-    local ctrl_d = key == '<C-d>'
-    local pre_lines_above
+    local ctrl_d = vim.keycode(key) == vim.keycode('<C-d>')
+    local init_lines_above
     if ctrl_d then
         if count == 1 then
             count = vim.o.scroll
         end
-        pre_lines_above = get_text_height(line('w0'), current_line)
+        init_lines_above = get_text_height(line('w0'), init_line)
+        if init_lines_above < scrolloff then
+            init_lines_above = scrolloff
+        end
     end
 
-    vim.cmd.normal { count .. 'j', bang = true  }
-
-    if count > lines_to_end - scrolloff or ctrl_d then
-        local lines_above = get_text_height(line('w0'), line('.'))
-        local max_lines_above = vim.fn.winheight(0) - scrolloff - 1
-
-        if current_line ~= last_line and lines_above <= max_lines_above and not ctrl_d then return end
-
-        local max_scroll = lines_above - scrolloff
-
-        if count >= lines_to_end then
-            max_scroll = math.min(max_scroll, count - lines_to_end + scrolloff)
-        end
-        if not opts.scroll_at_end then
-            max_scroll = lines_above - max_lines_above
-        end
-        if ctrl_d then
-            max_scroll = lines_above - pre_lines_above
-        end
-
-        if count > max_scroll then count = max_scroll end
-        if count < 1 then return end
-
-        vim.cmd.normal { count .. vim.keycode('<C-e>'), bang = true }
+    if count <= lines_to_end - scrolloff and not ctrl_d then
+        return
     end
+
+    vim.api.nvim_create_autocmd('SafeState', {
+        callback = function()
+            local lines_above = get_text_height(line('w0'), line('.'))
+            local max_lines_above = vim.fn.winheight(0) - scrolloff - 1
+
+            if init_line ~= last_line and lines_above <= max_lines_above and not ctrl_d then
+                return
+            end
+
+            local max_scroll = lines_above - scrolloff
+
+            if count >= lines_to_end then
+                max_scroll = math.min(max_scroll, count - lines_to_end + scrolloff)
+            end
+            if not opts.scroll_at_end then
+                max_scroll = lines_above - max_lines_above
+            end
+            if ctrl_d then
+                max_scroll = lines_above - init_lines_above
+            end
+
+            if count > max_scroll then count = max_scroll end
+            if count < 1 then return end
+
+            vim.cmd.normal { count .. vim.keycode('<C-e>'), bang = true }
+        end,
+        once = true,
+    })
 end
 
 return scroll
