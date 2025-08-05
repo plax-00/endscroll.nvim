@@ -43,10 +43,10 @@ local function scroll(key)
                 return
             end
 
-            local max_scroll = lines_above - scrolloff
+            local max_scroll = scrolloff - get_text_height(line('.'), last_line)
 
             if count >= lines_to_end then
-                max_scroll = math.min(max_scroll, count - lines_to_end + scrolloff)
+                max_scroll = math.min(lines_above - scrolloff, count - lines_to_end + scrolloff)
             end
             if not opts.scroll_at_end then
                 max_scroll = lines_above - max_lines_above

@@ -43,6 +43,13 @@ T.single_scroll_to_end = function()
     eq(get_filler_lines(), child.o.scrolloff)
 end
 
+T.single_scroll_before_end = function()
+    repeat
+        child.type_keys('j')
+    until child.fn.line('.') == INPUT_LINES - 5
+    eq(get_filler_lines(), child.o.scrolloff - 5)
+end
+
 T.single_scroll_past_end = function()
     repeat
         child.type_keys('j')
@@ -58,6 +65,11 @@ T.count_scroll_to_end = function()
     eq(get_filler_lines(), child.o.scrolloff)
     child.type_keys('j')
     eq(get_filler_lines(), child.o.scrolloff + 1)
+end
+
+T.count_scroll_before_end = function()
+    child.type_keys(INPUT_LINES - 6 .. 'j')
+    eq(get_filler_lines(), child.o.scrolloff - 5)
 end
 
 T.count_scroll_past_end = function()
