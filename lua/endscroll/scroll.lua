@@ -39,11 +39,11 @@ local function scroll(key)
             local lines_above = get_text_height(line('w0'), line('.'))
             local max_lines_above = vim.fn.winheight(0) - scrolloff - 1
 
-            if init_line ~= last_line and lines_above <= max_lines_above and not ctrl_d then
+            if init_line ~= line('$') and lines_above <= max_lines_above and not ctrl_d then
                 return
             end
 
-            local max_scroll = scrolloff - get_text_height(line('.'), last_line)
+            local max_scroll = scrolloff - get_text_height(line('.'), line('$'))
 
             if count >= lines_to_end then
                 max_scroll = math.min(lines_above - scrolloff, count - lines_to_end + scrolloff)
