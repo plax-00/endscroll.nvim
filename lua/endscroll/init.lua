@@ -14,6 +14,7 @@ local down_keys = {
     insert = vim.tbl_map(vim.keycode, {
         '<Down>',
         '<CR>',
+        '<C-j>'
     }),
 }
 
