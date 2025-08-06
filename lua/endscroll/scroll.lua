@@ -1,14 +1,14 @@
 local line = vim.fn.line
-local opts = require('endscroll.config').opts
 
 local function get_text_height(start_line, end_line)
     return vim.api.nvim_win_text_height(0, { start_row = start_line - 1, end_row = end_line - 1 }).all - 1
 end
 
-local function scroll(key)
-
+---@param ctrl_d boolean
+local function scroll(ctrl_d)
+    local config = vim.g.endscroll.config
     -- check for disabled filetype
-    if vim.tbl_contains(opts.disabled_filetypes, vim.o.filetype) then
+    if vim.tbl_contains(config.disabled_filetypes, vim.o.filetype) then
         return
     end
 
@@ -18,7 +18,6 @@ local function scroll(key)
     local init_line = line('.')
     local lines_to_end = get_text_height(init_line, last_line)
 
-    local ctrl_d = vim.keycode(key) == vim.keycode('<C-d>')
     local init_lines_above
     if ctrl_d then
         if count == 1 then
@@ -48,7 +47,7 @@ local function scroll(key)
             if count >= lines_to_end then
                 max_scroll = math.min(lines_above - scrolloff, count - lines_to_end + scrolloff)
             end
-            if not opts.scroll_at_end then
+            if not config.scroll_at_end then
                 max_scroll = lines_above - max_lines_above
             end
             if ctrl_d then
