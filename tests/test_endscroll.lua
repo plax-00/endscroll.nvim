@@ -7,8 +7,7 @@ local CHILD_PROC_COLS = 80
 local eq = MiniTest.expect.equality
 
 local child = MiniTest.new_child_neovim()
-local T = MiniTest.new_set()
-T.default = MiniTest.new_set {
+local T = MiniTest.new_set {
     hooks = {
         pre_case = function()
             -- Restart child process with custom 'init.lua' script
@@ -17,9 +16,6 @@ T.default = MiniTest.new_set {
                 '-u', 'tests/scripts/minimal_init.lua',
                 'tests/input.txt'
             })
-            child.lua [[
-                require('endscroll').setup()
-            ]]
         end,
         -- Stop once all test cases are finished
         post_once = child.stop,
@@ -27,21 +23,15 @@ T.default = MiniTest.new_set {
     parametrize = { { 'j' }, { '<Down>' }, { '<CR>' }, { '<C-n>' }, { '<C-j>' }, { '+' } },
 }
 
-T.non_default = MiniTest.new_set {
+T.default = MiniTest.new_set {
     hooks = {
         pre_case = function()
-            -- Restart child process with custom 'init.lua' script
-            child.restart({
-                '--cmd', 'set lines=' .. CHILD_PROC_LINES .. ' columns=' .. CHILD_PROC_COLS,
-                '-u', 'tests/scripts/minimal_init.lua',
-                'tests/input.txt'
-            })
+            child.lua [[ require('endscroll').setup() ]]
         end,
-        -- Stop once all test cases are finished
-        post_once = child.stop,
     },
-    parametrize = { { 'j' }, { '<Down>' }, { '<CR>' }, { '<C-n>' } },
 }
+
+T.non_default = MiniTest.new_set()
 
 local function get_filler_lines()
     return child.fn.winheight(0) - child.api.nvim_win_text_height(0, { start_row = child.fn.line('w0') }).all - 1
