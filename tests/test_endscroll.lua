@@ -24,7 +24,7 @@ T.default = MiniTest.new_set {
         -- Stop once all test cases are finished
         post_once = child.stop,
     },
-    parametrize = { { 'j' }, { '<Down>' }, { '<CR>' }, { '<C-n>' }, { '<C-j>' } },
+    parametrize = { { 'j' }, { '<Down>' }, { '<CR>' }, { '<C-n>' }, { '<C-j>' }, { '+' } },
 }
 
 T.non_default = MiniTest.new_set {
